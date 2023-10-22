@@ -1,0 +1,3 @@
+{
+  imports = [./applications.nix];
+}

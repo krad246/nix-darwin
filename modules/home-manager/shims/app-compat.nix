@@ -1,0 +1,4 @@
+{pkgs, ...}: {
+  # FIXME
+  imports = [./darwin];
+}
