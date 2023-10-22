@@ -1,4 +1,4 @@
-{...}: {
-  imports = [./git.nix];
-  programs.gh = {enable = true;};
+{ ... }: {
+  imports = [ ./git.nix ];
+  programs.gh = { enable = true; };
 }

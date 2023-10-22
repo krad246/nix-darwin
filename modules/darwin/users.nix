@@ -1,7 +1,6 @@
-{
-  username,
-  pkgs,
-  ...
+{ username
+, pkgs
+, ...
 }: {
   users.users.${username} = {
     description = "${username}";
@@ -12,6 +11,6 @@
     gid = 20;
   };
 
-  users.knownUsers = ["${username}"];
-  nix.settings.trusted-users = ["${username}"];
+  users.knownUsers = [ "${username}" ];
+  nix.settings.trusted-users = [ "${username}" ];
 }

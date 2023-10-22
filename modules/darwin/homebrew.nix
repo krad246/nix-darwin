@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   homebrew.enable = true;
   homebrew.onActivation.autoUpdate = true;
   homebrew.global.brewfile = true;
@@ -13,5 +13,5 @@
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has
   # limitiations, e.g., Transmit, install the Homebrew Cask.
-  homebrew.casks = ["steam" "signal" "arc"];
+  homebrew.casks = [ "steam" "signal" "arc" ];
 }

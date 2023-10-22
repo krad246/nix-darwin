@@ -1,14 +1,9 @@
-rec {
-  krad246 = rec {
-    username = "krad246";
-    commonSpecialArgs = {inherit username;};
+{
+  darwinPlatform = {
+    modules = [ ./shared ./modules/darwin ];
     home-manager = {
-      inherit username;
-      enable = true;
-      modules = [./modules/home-manager];
-      extraConfig = {home.stateVersion = "23.05";};
+      enable = false;
+      modules = [ ./modules/home-manager ];
     };
   };
-
-  darwinPlatform = { modules = [./shared ./modules/darwin ]; };
 }

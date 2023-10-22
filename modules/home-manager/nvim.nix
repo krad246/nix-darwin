@@ -1,7 +1,6 @@
-{
-  config,
-  pkgs,
-  ...
+{ config
+, pkgs
+, ...
 }: {
   home.sessionVariables = rec {
     EDITOR = "${pkgs.neovim}/bin/nvim";
@@ -17,7 +16,7 @@
     vimAlias = true;
     vimdiffAlias = true;
 
-    extraPackages = with pkgs; [];
+    extraPackages = with pkgs; [ ];
 
     plugins = with pkgs.vimPlugins; [
       vim-multiple-cursors

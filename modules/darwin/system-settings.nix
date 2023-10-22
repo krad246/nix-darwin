@@ -1,13 +1,14 @@
-{
-  config,
-  pkgs,
-  lib,
-  username,
-  mac-app-util,
-  ...
-}: let
+{ config
+, pkgs
+, lib
+, username
+, mac-app-util
+, ...
+}:
+let
   manager = mac-app-util.packages.${pkgs.stdenv.system}.default;
-in {
+in
+{
   # Add ability to used TouchID for sudo authentication
   security.pam.enableSudoTouchIdAuth = true;
 

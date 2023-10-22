@@ -1,1 +1,1 @@
-{imports = [./nix-core.nix ./system-packages.nix];}
+{ imports = [ ./nix-core.nix ./system-packages.nix ]; }

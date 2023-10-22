@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     uutils-coreutils
 
@@ -9,7 +9,7 @@
     bottom
   ];
 
-  environment.shells = [pkgs.bashInteractive pkgs.zsh];
+  environment.shells = [ pkgs.bashInteractive pkgs.zsh ];
   environment.interactiveShellInit = ''source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh'';
   programs = {
     bash.enable = true;

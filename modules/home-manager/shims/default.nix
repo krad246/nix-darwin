@@ -1,3 +1,3 @@
-{...}: {
-  imports = [./app-compat.nix];
+{ ... }: {
+  imports = [ ./app-compat.nix ];
 }

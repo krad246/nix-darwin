@@ -1,6 +1,8 @@
-{...} @ args: let
+{ ... } @ args:
+let
   inherit (args) hostname;
-in {
+in
+{
   networking.hostName = hostname;
   networking.computerName = hostname;
 }

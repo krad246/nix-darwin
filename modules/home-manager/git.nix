@@ -1,12 +1,12 @@
-{...}: {
+{ ... }: {
   programs.git = {
     enable = true;
     userName = "Keerthi Radhakrishnan";
     userEmail = "krad246@gmail.com";
 
-    aliases = {};
+    aliases = { };
 
-    extraConfig = {pull.rebase = true;};
+    extraConfig = { pull.rebase = true; };
 
     # Prettier pager, adds syntax highlighting and line numbers
     delta = {

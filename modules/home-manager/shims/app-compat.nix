@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   # FIXME
-  imports = [./darwin];
+  imports = [ ./darwin ];
 }

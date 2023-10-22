@@ -1,80 +1,71 @@
-{...} @ rest: let
+{ ... } @ rest:
+let
   inherit (rest) inputs nixpkgs;
   inherit (nixpkgs) lib;
-in {
-  createSystem = profile: {
-    system,
-    modules ? [],
-    extraConfig ? {},
-    home-manager ? {},
-    specialArgs ? {},
-    commonSpecialArgs ? {},
-    ...
-  } @ args: let
-    profileModules = profile.modules or [];
-    profileSystemArgs = profile.specialArgs or {};
-    profileSharedArgs = profile.commonSpecialArgs or {};
+in
+{
+  createSystem = profile: { system
+                          , modules ? [ ]
+                          , extraConfig ? { }
+                          , home-manager ? { }
+                          , specialArgs ? { }
+                          , extraSpecialArgs ? { }
+                          , commonSpecialArgs ? { }
+                          , ...
+                          } @ args:
+    let
+      inherit (args) username hostname;
 
-    profileHomeModules = profile.home-manager.modules or [];
-    runtimeHomeModules = home-manager.modules or [];
-    profileHomeArgs = profile.home-manager.specialArgs or {};
-    runtimeHomeArgs = home-manager.specialArgs or {};
+      profileModules = profile.modules or [ ];
+      profileSystemArgs = profile.specialArgs or { };
+      profileSharedArgs = profile.commonSpecialArgs or { };
 
-    # Combine the runtime function args with some profile args
-    # TODO: Determine the full reason for this design
-    # sourced from https://github.com/IvarWithoutBones/dotfiles.git
-    systemModuleArgs = lib.mergeAttrs specialArgs profileSystemArgs;
-    homeModuleArgs = lib.mergeAttrs runtimeHomeArgs profileHomeArgs;
-    sharedModuleArgs = lib.mergeAttrs commonSpecialArgs profileSharedArgs;
+      profileHomeModules = profile.home-manager.modules or [ ];
+      runtimeHomeModules = home-manager.modules or [ ];
+      profileHomeArgs = profile.home-manager.extraSpecialArgs or { };
+      runtimeHomeArgs = home-manager.extraSpecialArgs or { };
 
-    homeEnabled = (profile.home-manager.enable or false) || (home-manager.enable or false);
-    homeModules = profileHomeModules ++ runtimeHomeModules;
-    sharedModules = modules ++ profileModules;
+      # Combine the runtime function args with some profile args
+      # TODO: Determine the full reason for this design
+      # sourced from https://github.com/IvarWithoutBones/dotfiles.git
+      systemModuleArgs = lib.mergeAttrs specialArgs profileSystemArgs;
+      homeModuleArgs = lib.mergeAttrs runtimeHomeArgs profileHomeArgs;
+      sharedModuleArgs = lib.mergeAttrs commonSpecialArgs profileSharedArgs;
 
-    configUsername =
-      lib.optionalString homeEnabled
-      (home-manager.username or profile.home-manager.username);
-    configHostname =
-      lib.optionalString homeEnabled
-      (home-manager.hostname or profile.home-manager.hostname);
-  in
-    inputs.nix-darwin.lib.darwinSystem rec {
+      homeEnabled = (profile.home-manager.enable or false) || (home-manager.enable or false);
+      homeModules = profileHomeModules ++ runtimeHomeModules;
+      sharedModules = modules ++ profileModules;
+      systemModules = sharedModules;
+    in
+    inputs.nix-darwin.lib.darwinSystem {
       inherit system;
 
       specialArgs =
         {
           inherit system;
+          inherit username hostname;
         }
         // inputs
         // sharedModuleArgs
-        // systemModuleArgs
-        // {
-          username = configUsername;
-          hostname = configHostname;
-        };
+        // systemModuleArgs;
 
       modules =
-        sharedModules
-        ++ lib.optionals homeEnabled [
+        systemModules
+        ++ (lib.optionals homeEnabled [
           inputs.home-manager.darwinModule
           {
-            home-manager = rec {
+            inherit lib;
+            home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs =
-                {
-                  inherit system;
-                }
-                // inputs
-                // homeModuleArgs
-                // sharedModuleArgs;
-
+              extraSpecialArgs = { inherit system username; } // inputs // homeModuleArgs // sharedModuleArgs;
               sharedModules = homeModules;
-              users.${configUsername} = {
+              users.${username} = {
                 imports = homeModules;
+                home.stateVersion = "23.05";
               };
             };
           }
-        ];
+        ]);
     };
 }

@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   programs.zsh = {
     enable = true;
 
@@ -14,11 +14,11 @@
 
     oh-my-zsh = {
       enable = false;
-      plugins = [];
+      plugins = [ ];
       theme = "gruvbox";
     };
 
-    plugins = [];
+    plugins = [ ];
 
     shellAliases = {
       ls = "ls --color=auto";
